@@ -11,8 +11,8 @@ endif()
 project(OoE-Plugin)
 include("${VITASDK}/share/vita.cmake" REQUIRED)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-q -Wall -O3 -nostdlib")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-q -Wall -O3 -nostdlib -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions -g")
 
 add_executable(${PROJECT_NAME}
         src/headers/constants.h
@@ -28,7 +28,9 @@ add_executable(${PROJECT_NAME}
 
 
 target_link_libraries(${PROJECT_NAME}
-        c  # wtf
+        c
+#        k # Uncomment k and gcc if c doesn't compile
+#        gcc
         SceIofilemgr_stub
         SceLibKernel_stub
 

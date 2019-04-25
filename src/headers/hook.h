@@ -10,11 +10,9 @@
 #include <taihen.h>
 
 int hook();
-
 int unhook();
 
-int hookStrings(tai_module_info_t info);
+int injectStrings(tai_module_info_t info);
+int releaseStringInjections();
 
-SceUID inject(SceUID modid, const char* text, int address);
-
-int unhookStrings();
+SceUID injectString(SceUID modid, const char* text, int address);

@@ -25,14 +25,13 @@ int hook() {
 
     log_writef("mouid: %d, mnid: %d, name: %s\n", info.name);
 
-    const char *expected = "imhPSP2M";
-    if (strcmp(info.name, expected) != 0) {
-        log_writef("Incorrect module gotten! Expected: \"%s\", but got \"%s\"!\n", expected, info.name);
+    if (strcmp(info.name, MODULE_NAME) != 0) {
+        log_writef("Incorrect module gotten! Expected: \"%s\", but got \"%s\"!\n", MODULE_NAME, info.name);
         return SCE_KERNEL_START_FAILED;
     }
 
-    if (hookStrings(info) != CODE_SUCCESS_HOOK_STR) {
-        ret = SCE_KERNEL_STOP_SUCCESS;
+    if (injectStrings(info) != CODE_SUCCESS_INJECT_STR) {
+        ret = SCE_KERNEL_START_FAILED;
     }
 
     return ret;
@@ -41,7 +40,7 @@ int hook() {
 int unhook() {
     int ret = SCE_KERNEL_STOP_SUCCESS;
 
-    if (unhookStrings() != CODE_SUCCESS_UNHOOK_STR) {
+    if (releaseStringInjections() != CODE_SUCCESS_RELEASE_INJECT_STR) {
         ret = SCE_KERNEL_STOP_SUCCESS;
     }
 

@@ -9,6 +9,9 @@
 
 #define BUF_MAX_LEN 256
 
-void log_writef(const char *buffer, ...);
+#include <stdarg.h>
+
+int log_Vwritef(const char *buffer, va_list list);
+int log_writef(const char *buffer, ...);
 
 void log_write(const char *buffer);

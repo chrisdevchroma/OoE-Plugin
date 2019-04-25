@@ -10,15 +10,19 @@
 #include "headers/constants.h"
 #include "headers/log.h"
 
-void log_writef(const char *format, ...) {
+int log_Vwritef(const char *format, va_list list) {
     char buffer[BUF_MAX_LEN];
+    int ret = sceClibVsnprintf(buffer, sizeof(buffer), format, list);
+    log_write(buffer);
+    return ret;
+}
 
+int log_writef(const char *format, ...) {
     va_list list;
     va_start(list, format);
-    sceClibVsnprintf(buffer, sizeof(buffer), format, list);
+    int ret = log_Vwritef(format, list);
     va_end(list);
-
-    log_write(buffer);
+    return ret;
 }
 
 /**
@@ -26,7 +30,7 @@ void log_writef(const char *format, ...) {
  */
 void log_write(const char *buffer) {
     if (sceIoMkdir(OOE_FOLDER_PATH, 0777) == -1) {
-        sceClibPrintf("Failed to make directory \"%s\"!", OOE_FOLDER_PATH);
+        sceClibPrintf("Failed to make directory \"%s\"!\n", OOE_FOLDER_PATH);
         return;
     }
 

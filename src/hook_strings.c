@@ -11,17 +11,57 @@
 #include "headers/codes.h"
 #include "headers/log.h"
 
-static SceUID patchRefs[3];
+static SceUID injectRefs[6];
 
-int hookStrings(tai_module_info_t info) {
-    patchRefs[0] = inject(info.modid, "Story Mode", 0x0071D7A7);
-    patchRefs[1] = inject(info.modid, "Select an item to play", 0x0071E51F);
-    patchRefs[2] = inject(info.modid, "It is a mode that can advance the original story", 0x0071E56F);
-    return CODE_SUCCESS_HOOK_STR;
+int injectStrings(tai_module_info_t info) {
+    //TODO
+    injectRefs[0] = injectString(info.modid, "Story Mode", 0x0071D7A7);
+    injectRefs[1] = injectString(info.modid, "Select an item to play", 0x0071E51F);
+    injectRefs[2] = injectString(info.modid, "It is a mode that can advance the original story", 0x0071E56F);
+    injectRefs[3] = injectString(info.modid, "Cursor", 0x0071E12F);//カーソル移動
+    injectRefs[4] = injectString(info.modid, "Select", 0x0071D6FB);//決定
+    injectRefs[5] = injectString(info.modid, "Help", 0x0071D77B);//ヘルプ
+
+    //Check if injections were actually injected
+    for (int i = 0; i < sizeof(injectRefs); ++i) {
+        SceUID patchRef = injectRefs[i];
+        if (patchRef < 0) {
+            log_writef("Patch ref is invalid! Ref index: %d\n", i);
+            return CODE_FAILED_INJECT_STR;
+        }
+    }
+
+    return CODE_SUCCESS_INJECT_STR;
 }
 
-SceUID inject(SceUID modid, const char* text, int address) {
-    SceUID injectRef = taiInjectData(modid, 0x000000, address, text, strlen(text));
+int releaseStringInjections() {
+    int flag = 0;
+    for(int i = 0; i < sizeof(injectRefs); ++i) {
+        SceUID patchRef = injectRefs[i];
+        if (patchRef < 0) {
+            log_writef("Patch ref is invalid?! Hook index: %d\n", i);
+            flag++;
+            continue;
+        }
+
+        if (taiInjectRelease(patchRef) == 0) {
+            log_writef("Released inject. Hook index: %d\n", i);
+        } else {
+            log_writef("Failed to release inject! Hook index: %d\n", i);
+            flag++;
+        }
+    }
+
+    if (flag > 0) {
+        log_writef("Failed to unhook multiple hooks for strings! Flag: %d\n", flag);
+        return CODE_FAILED_RELEASE_INJECT_STR;
+    }
+
+    return CODE_SUCCESS_RELEASE_INJECT_STR;
+}
+
+SceUID injectString(SceUID modid, const char* text, int address) {
+    SceUID injectRef = taiInjectData(modid, 0x000000, address, text, sizeof(text));
     if (injectRef > -1) {
         log_writef("Injected text \"%s\" into address %d\n", text, address);
     } else {
@@ -29,21 +69,4 @@ SceUID inject(SceUID modid, const char* text, int address) {
         return -1;
     }
     return injectRef;
-}
-
-int unhookStrings() {
-    for(int i = 0; i < sizeof(patchRefs); ++i) {
-        SceUID patchRef = patchRefs[i];
-        if (patchRef < 0) {
-            log_writef("Patch ref is invalid?!");
-            continue;
-        }
-
-        if (taiInjectRelease(patchRef) == 0) {
-            log_writef("Released inject");
-        } else {
-            log_writef("Failed to release inject!");
-        }
-    }
-    return CODE_SUCCESS_UNHOOK_STR;
 }
