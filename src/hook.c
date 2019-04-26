@@ -23,7 +23,7 @@ int hook() {
         return SCE_KERNEL_START_FAILED;
     }
 
-    log_writef("mouid: %d, mnid: %d, name: %s\n", info.name);
+    log_writef("mouid: %d, mnid: %d, name: %s\n\n", info.name);
 
     if (strcmp(info.name, MODULE_NAME) != 0) {
         log_writef("Incorrect module gotten! Expected: \"%s\", but got \"%s\"!\n", MODULE_NAME, info.name);

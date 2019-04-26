@@ -15,4 +15,4 @@ int unhook();
 int injectStrings(tai_module_info_t info);
 int releaseStringInjections();
 
-SceUID injectString(SceUID modid, const char* text, int address);
+SceUID injectString(SceUID modid, int address, const char* text);

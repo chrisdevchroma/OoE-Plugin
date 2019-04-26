@@ -7,7 +7,7 @@
 
 #endif //OOE_LOG_H
 
-#define BUF_MAX_LEN 256
+#define BUF_MAX_LEN 512
 
 #include <stdarg.h>
 

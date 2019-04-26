@@ -10,18 +10,18 @@
 #include "headers/constants.h"
 #include "headers/log.h"
 
-int log_Vwritef(const char *format, va_list list) {
-    char buffer[BUF_MAX_LEN];
-    int ret = sceClibVsnprintf(buffer, sizeof(buffer), format, list);
-    log_write(buffer);
-    return ret;
-}
-
 int log_writef(const char *format, ...) {
     va_list list;
     va_start(list, format);
     int ret = log_Vwritef(format, list);
     va_end(list);
+    return ret;
+}
+
+int log_Vwritef(const char *format, va_list list) {
+    char buffer[BUF_MAX_LEN];
+    int ret = sceClibVsnprintf(buffer, sizeof(buffer), format, list);
+    log_write(buffer);
     return ret;
 }
 
