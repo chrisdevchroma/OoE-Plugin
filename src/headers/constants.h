@@ -12,4 +12,6 @@
 #define MODULE_NAME "imhPSP2M"
 
 #define OOE_FOLDER_PATH "ux0:data/OoE"
-#define LOG_PATH "ux0:data/OoE/log.txt"
+
+#define LOG_FILE_PATH "ux0:data/OoE/log.txt"
+#define FILE_TRANSLATION_BIN_PATH "ux0:data/OoE/translation.bin"

@@ -19,20 +19,25 @@ add_executable(${PROJECT_NAME}
         src/headers/hook.h
         src/headers/codes.h
         src/headers/log.h
+        src/headers/bin.h
 
         src/main.c
         src/hook.c
         src/log.c
         src/hook_strings.c
+        src/bin.c
 )
 
 
 target_link_libraries(${PROJECT_NAME}
-        c
-#        k # Uncomment k and gcc if c doesn't compile
-#        gcc
+#        c
+        k # Uncomment k and gcc if c doesn't compile
+        gcc
+
         SceIofilemgr_stub
         SceLibKernel_stub
+        SceSysmem_stub
+        SceLibc_stub
 
         taihen_stub
 )
