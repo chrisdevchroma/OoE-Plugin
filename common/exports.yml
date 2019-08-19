@@ -1,4 +1,4 @@
-OoE-Plugin:
+OoE-Plugin-common:
   attributes: 0
   version:
     major: 0

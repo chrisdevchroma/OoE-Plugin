@@ -8,38 +8,16 @@ if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
     endif()
 endif()
 
-project(OoE-Plugin)
+project(OoE-Plugin C)
 include("${VITASDK}/share/vita.cmake" REQUIRED)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-q -Wall -O3 -nostdlib -g")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions -g")
 
-add_executable(${PROJECT_NAME}
-        src/headers/constants.h
-        src/headers/hook.h
-        src/headers/codes.h
-        src/headers/log.h
-        src/headers/bin.h
+add_definitions(-D_DEBUG)
 
-        src/main.c
-        src/hook.c
-        src/log.c
-        src/hook_strings.c
-        src/bin.c
-)
-
-
-target_link_libraries(${PROJECT_NAME}
-#        c
-        k # Uncomment k and gcc if c doesn't compile
-        gcc
-
-        SceIofilemgr_stub
-        SceLibKernel_stub
-        SceSysmem_stub
-        SceLibc_stub
-
-        taihen_stub
-)
-
-vita_create_self(${PROJECT_NAME}.suprx ${PROJECT_NAME} CONFIG exports.yml UNSAFE)
+add_subdirectory(common)
+add_subdirectory(common-nonpdrm)
+add_subdirectory(common-user)
+add_subdirectory(user)
+add_subdirectory(nonpdrm)
