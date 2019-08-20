@@ -28,10 +28,9 @@ add_executable(${PROJECT_NAME}
         src/bin.c
 )
 
-
 target_link_libraries(${PROJECT_NAME}
 #        c
-        k # Uncomment k and gcc if c doesn't compile
+        k
         gcc
 
         SceIofilemgr_stub
@@ -40,6 +39,8 @@ target_link_libraries(${PROJECT_NAME}
         SceLibc_stub
 
         taihen_stub
+
+        kuio_stub
 )
 
 vita_create_self(${PROJECT_NAME}.suprx ${PROJECT_NAME} CONFIG exports.yml UNSAFE)
